@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LectuTrack - App de Lecturas</title>
+
+  <!-- Puedes quitar esto si harás tu CSS desde cero -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-top">
+      <h1 class="app-title">📚 LectuTrack</h1>
+      <p class="app-subtitle">Tu progreso de lectura, sin perderte.</p>
+    </div>
+
+    <!-- CONTADORES (opcionales pero chidos) -->
+    <section class="counters">
+      <div class="counter">
+        <span class="counter-number" id="countTotal">0</span>
+        <span class="counter-label">Total</span>
+      </div>
+      <div class="counter">
+        <span class="counter-number" id="countPendiente">0</span>
+        <span class="counter-label">Pendiente</span>
+      </div>
+      <div class="counter">
+        <span class="counter-number" id="countLeyendo">0</span>
+        <span class="counter-label">Leyendo</span>
+      </div>
+      <div class="counter">
+        <span class="counter-number" id="countTerminado">0</span>
+        <span class="counter-label">Terminado</span>
+      </div>
+    </section>
+  </header>
+
+  <main class="container">
+    <!-- FORMULARIO -->
+    <section class="panel">
+      <h2 class="panel-title">➕ Agregar / Editar lectura</h2>
+
+      <form id="formLectura" class="form">
+        <!-- TÍTULO -->
+        <label class="label">
+          Título <span class="req">*</span>
+          <input id="titulo" class="input" type="text" placeholder="Ej. Berserk Vol. 1" required />
+        </label>
+
+        <!-- TIPO -->
+        <label class="label">
+          Tipo
+          <select id="tipo" class="select">
+            <option value="Manga" selected>Manga</option>
+            <option value="Libro">Libro</option>
+            <option value="Comic">Comic</option>
+          </select>
+        </label>
+
+        <!-- ESTADO -->
+        <label class="label">
+          Estado
+          <select id="estado" class="select">
+            <option value="Pendiente" selected>Pendiente</option>
+            <option value="Leyendo">Leyendo</option>
+            <option value="Terminado">Terminado</option>
+          </select>
+        </label>
+
+        <!-- CAMPOS DINÁMICOS: MANGA -->
+        <div id="boxManga" class="dynamic-box">
+          <h3 class="dynamic-title">📘 Progreso (Manga)</h3>
+          <div class="grid-2">
+            <label class="label">
+              Tomo
+              <input id="mangaTomo" class="input" type="number" min="1" placeholder="Ej. 3" />
+            </label>
+            <label class="label">
+              Página
+              <input id="mangaPagina" class="input" type="number" min="1" placeholder="Ej. 45" />
+            </label>
+          </div>
+        </div>
+
+        <!-- CAMPOS DINÁMICOS: LIBRO -->
+        <div id="boxLibro" class="dynamic-box hidden">
+          <h3 class="dynamic-title">📕 Progreso (Libro)</h3>
+          <div class="grid-2">
+            <label class="label">
+              Capítulo
+              <input id="libroCapitulo" class="input" type="number" min="1" placeholder="Ej. 5" />
+            </label>
+            <label class="label">
+              Página (opcional)
+              <input id="libroPagina" class="input" type="number" min="1" placeholder="Ej. 120" />
+            </label>
+          </div>
+        </div>
+
+        <!-- CAMPOS DINÁMICOS: COMIC -->
+        <div id="boxComic" class="dynamic-box hidden">
+          <h3 class="dynamic-title">📗 Progreso (Comic)</h3>
+          <div class="grid-2">
+            <label class="label">
+              Volumen
+              <input id="comicVolumen" class="input" type="number" min="1" placeholder="Ej. 2" />
+            </label>
+            <label class="label">
+              Página
+              <input id="comicPagina" class="input" type="number" min="1" placeholder="Ej. 18" />
+            </label>
+          </div>
+        </div>
+
+        <!-- NOTA -->
+        <label class="label">
+          Nota de contexto (para no perderte)
+          <textarea id="nota" class="textarea" rows="3" placeholder="Ej. Aquí empieza el arco del eclipse..."></textarea>
+        </label>
+
+        <!-- BOTONES -->
+        <div class="form-actions">
+          <button id="btnGuardar" class="btn" type="submit">Agregar</button>
+          <button id="btnCancelar" class="btn btn-secondary hidden" type="button">
+            Cancelar edición
+          </button>
+        </div>
+
+        <p class="hint">
+          Tip: el botón <strong>Cambiar estado</strong> en cada tarjeta rota:
+          Pendiente → Leyendo → Terminado.
+        </p>
+      </form>
+    </section>
+
+    <!-- FILTROS -->
+    <section class="panel">
+      <h2 class="panel-title">🔎 Buscar y filtrar</h2>
+
+      <div class="filters">
+        <label class="label">
+          Buscar por título
+          <input id="buscar" class="input" type="text" placeholder="Ej. berserk, dune, spiderman..." />
+        </label>
+
+        <div class="grid-2">
+          <label class="label">
+            Filtro por estado
+            <select id="filtroEstado" class="select">
+              <option value="Todos" selected>Todos</option>
+              <option value="Pendiente">Pendiente</option>
+              <option value="Leyendo">Leyendo</option>
+              <option value="Terminado">Terminado</option>
+            </select>
+          </label>
+
+          <label class="label">
+            Filtro por tipo
+            <select id="filtroTipo" class="select">
+              <option value="Todos" selected>Todos</option>
+              <option value="Manga">Manga</option>
+              <option value="Libro">Libro</option>
+              <option value="Comic">Comic</option>
+            </select>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- LISTA -->
+    <section class="panel">
+      <h2 class="panel-title">📌 Mis lecturas</h2>
+
+      <div id="listaLecturas" class="list">
+        <!-- Aquí el JS renderiza tarjetas -->
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>Hecho con ❤️ usando HTML, CSS y JavaScript (StackBlitz).</p>
+  </footer>
+
+  <!-- IMPORTANTE: en StackBlitz tu JS puede llamarse script.js -->
+  <script src="script.js"></script>
+</body>
+</html>
